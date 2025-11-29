@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrarse</title>
+</head>
+<body>
+
+    <h2>Registro</h2>
+
+    <form id="registerForm">
+        <label>Nombre:</label><br>
+        <input type="text" id="user_name" required><br><br>
+
+        <label>Correo:</label><br>
+        <input type="email" id="user_mail" required><br><br>
+
+        <label>Contraseña:</label><br>
+        <input type="password" id="user_password" required><br><br>
+
+        <button type="submit">Registrarse</button>
+    </form>
+
+    <p id="mensaje"></p>
+
+    <script>
+        const form = document.getElementById("registerForm");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const user_name = document.getElementById("user_name").value;
+            const user_mail = document.getElementById("user_mail").value;
+            const user_password = document.getElementById("user_password").value;
+
+            const respuesta = await fetch("http://localhost:3000/user/signin", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({user_name, user_mail, user_password})
+            });
+
+            const data = await respuesta.json();
+            const mensaje = document.getElementById("mensaje");
+
+            if (respuesta.status === 201) {
+                window.location.href = "/login.html"; 
+            } else {
+                mensaje.innerText = data.message;
+                mensaje.style.color = "red";
+            }
+        });
+    </script>
+
+</body>
+</html>

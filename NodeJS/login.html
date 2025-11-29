@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h2>Iniciar Sesión</h2>
+
+    <form id="loginForm">
+        <label>Usuario:</label><br>
+        <input type="text" id="user_name" required><br><br>
+
+        <label>Contraseña:</label><br>
+        <input type="password" id="user_password" required><br><br>
+
+        <button type="submit">Entrar</button>
+    </form>
+
+    <p id="mensaje"></p>
+    <p>
+        ¿No tienes cuenta? 
+        <a href="register.html" style="color: blue; text-decoration: underline; cursor: pointer;">
+            Regístrate aquí
+        </a>
+    </p>
+
+    <script>
+        const form = document.getElementById("loginForm");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const user_name = document.getElementById("user_name").value;
+            const user_password = document.getElementById("user_password").value;
+
+            const respuesta = await fetch("http://localhost:3000/user/login", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ user_name, user_password })
+            });
+
+            const data = await respuesta.json();
+            const mensaje = document.getElementById("mensaje");
+
+            if (respuesta.status === 200) {
+                localStorage.setItem("token", data.message);
+                window.location.href = "/node.html";
+            } else {
+                mensaje.innerText = data.message;
+                mensaje.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>
