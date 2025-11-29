@@ -1,0 +1,14 @@
+{
+  "name": "node_pf",
+  "version": "1.0.0",
+  "description": "ProyectoFinalNode",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "LD",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
