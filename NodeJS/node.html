@@ -1,1 +1,23 @@
-<p>Hola</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Panel de Administrador</title>
+</head>
+<body>
+    <h1>Panel de Administración</h1>
+    <button onclick="window.location.href='add.html'">Agregar empleado</button>
+    <button onclick="window.location.href='modify.html'">Modificar empleado</button>
+    <button onclick="window.location.href='delete.html'">Eliminar empleado</button>
+    <button onclick="window.location.href='search.html'">Buscar empleado</button>
+
+    <script>
+        // Validar si el usuario está logueado
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("No autorizado. Inicia sesión");
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>

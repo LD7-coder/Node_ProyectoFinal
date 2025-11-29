@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Modificar empleado</title>
+</head>
+<body>
+    <h2>Modificar empleado</h2>
+
+    <form id="modifyForm">
+        <input type="number" id="id" placeholder="ID del empleado" required><br>
+        <input type="text" id="nombre" placeholder="Nuevo nombre"><br>
+        <input type="email" id="correo" placeholder="Nuevo correo"><br>
+        <input type="password" id="contra" placeholder="Nueva contraseña"><br>
+        <button type="submit">Modificar</button>
+    </form>
+
+    <button onclick="window.location.href='node.html'">Volver</button>
+
+    <script>
+        const token = localStorage.getItem("token");
+
+        document.getElementById("modifyForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById("id").value;
+
+            const body = {
+                nombre_usuarios: document.getElementById("nombre").value,
+                correo_usuarios: document.getElementById("correo").value,
+                contra_usuarios: document.getElementById("contra").value
+            };
+
+            const response = await fetch(`/user/modify/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(body)
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        });
+    </script>
+</body>
+</html>

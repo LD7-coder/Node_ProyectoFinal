@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Buscar empleado</title>
+</head>
+<body>
+    <h2>Buscar empleado</h2>
+
+    <input type="text" id="search" placeholder="Nombre">
+    <button onclick="buscar()">Buscar</button>
+
+    <pre id="result"></pre>
+
+    <button onclick="window.location.href='node.html'">Volver</button>
+
+<script>
+    const token = localStorage.getItem("token");
+
+    async function buscar() {
+        const name = document.getElementById("search").value;
+        const response = await fetch(`/user/search/${name}`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+        document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+    }
+</script>
+</body>
+</html>

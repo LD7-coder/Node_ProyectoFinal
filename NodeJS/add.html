@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Agregar empleado</title>
+</head>
+<body>
+    <h2>Agregar empleado</h2>
+
+    <form id="addForm">
+        <input type="text" id="nombre" placeholder="Nombre" required><br>
+        <input type="email" id="correo" placeholder="Correo" required><br>
+        <input type="password" id="contra" placeholder="Contraseña" required><br>
+        <button type="submit">Guardar empleado</button>
+    </form>
+
+    <button onclick="window.location.href='node.html'">Volver</button>
+
+    <script>
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("No autorizado");
+            window.location.href = "login.html";
+        }
+
+        document.getElementById("addForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const body = {
+                nombre_usuarios: document.getElementById("nombre").value,
+                correo_usuarios: document.getElementById("correo").value,
+                contra_usuarios: document.getElementById("contra").value
+            };
+
+            const response = await fetch("/user/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(body)
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        });
+    </script>
+</body>
+</html>

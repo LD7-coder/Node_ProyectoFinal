@@ -2,6 +2,8 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const user = express.Router();
 const db = require("../config/database");
+const auth = require("../middleware/auth");
+
 
 user.post("/signin",async (req,res,next)=>{
     const {user_name,user_mail,user_password} = req.body;
@@ -52,6 +54,47 @@ user.get("/", async(req,res,next)=>{
     const rows = await db.query(query);
 
     return res.status(200).json({code:200,message:rows});
+});
+
+
+// Agregar empleado
+user.post("/add", auth, async (req, res) => {
+    const { nombre_usuarios, correo_usuarios, contra_usuarios } = req.body;
+    const query = `INSERT INTO usuarios (nombre_usuarios, correo_usuarios, contra_usuarios)
+                   VALUES ('${nombre_usuarios}', '${correo_usuarios}', '${contra_usuarios}')`;
+
+    const result = await db.query(query);
+    return res.status(201).json({ message: "Empleado agregado", result });
+});
+
+// Modificar empleado
+user.put("/modify/:id", auth, async (req, res) => {
+    const { id } = req.params;
+    const { nombre_usuarios, correo_usuarios, contra_usuarios } = req.body;
+
+    const query = `UPDATE usuarios SET nombre_usuarios='${nombre_usuarios}', correo_usuarios='${correo_usuarios}', contra_usuarios='${contra_usuarios}'
+                   WHERE id_usuarios = ${id}`;
+
+    const result = await db.query(query);
+    return res.status(200).json({ message: "Empleado modificado", result });
+});
+
+// Eliminar empleado
+user.delete("/delete/:id", auth, async (req, res) => {
+    const { id } = req.params;
+    const query = `DELETE FROM usuarios WHERE id_usuarios = ${id}`;
+    const result = await db.query(query);
+
+    return res.status(200).json({ message: "Empleado eliminado" });
+});
+
+// Buscar empleado
+user.get("/search/:name", auth, async (req, res) => {
+    const { name } = req.params;
+    const query = `SELECT * FROM usuarios WHERE nombre_usuarios LIKE '%${name}%'`;
+    const result = await db.query(query);
+
+    return res.status(200).json(result);
 });
 
 module.exports = user;
